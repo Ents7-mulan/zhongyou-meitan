@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中邮煤炭</title>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --paper: rgba(255, 250, 243, 0.92);
+      --ink: #1f1a17;
+      --muted: #74665b;
+      --accent: #b04a22;
+      --accent-soft: rgba(176, 74, 34, 0.12);
+      --line: rgba(31, 26, 23, 0.1);
+      --shadow: 0 24px 60px rgba(73, 43, 20, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(176, 74, 34, 0.16), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(65, 48, 37, 0.14), transparent 28%),
+        linear-gradient(135deg, #f8f3ec 0%, #eee5d8 50%, #e5d7c3 100%);
+      padding: 40px 20px 56px;
+    }
+
+    .wrap {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      background: var(--paper);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 40px 32px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(176, 74, 34, 0.18), transparent 68%);
+      pointer-events: none;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.6rem, 5vw, 4.8rem);
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
+
+    .subtitle {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      letter-spacing: 0.03em;
+    }
+
+    .stats {
+      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .stat {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+    }
+
+    .stat-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 1.28rem;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 24px;
+      background: var(--paper);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      overflow: hidden;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      padding: 26px 28px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 880px;
+    }
+
+    thead {
+      background: rgba(176, 74, 34, 0.08);
+    }
+
+    th, td {
+      padding: 16px 18px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid var(--line);
+    }
+
+    th {
+      font-size: 0.86rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    tbody tr {
+      transition: transform 180ms ease, background-color 180ms ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.65);
+      transform: translateY(-1px);
+    }
+
+    .code {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .company {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .fullname {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(31, 26, 23, 0.06);
+      font-size: 0.82rem;
+      color: #42362d;
+      white-space: nowrap;
+    }
+
+    .footer {
+      padding: 18px 28px 26px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 24px 14px 40px;
+      }
+
+      .hero,
+      .section {
+        border-radius: 22px;
+      }
+
+      .hero {
+        padding: 28px 20px 24px;
+      }
+
+      .section-head {
+        padding: 22px 20px 16px;
+      }
+
+      .footer {
+        padding: 16px 20px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>中邮煤炭</h1>
+      <div class="subtitle" id="live-time">当前时间加载中...</div>
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">收录范围</span>
+          <span class="stat-value">A 股煤炭开采</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">公司数量</span>
+          <span class="stat-value">27 家</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">展示内容</span>
+          <span class="stat-value">代码 / 简称 / 主营</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>煤炭在 A 股的上市公司清单</h2>
+          <p>按较新的公开行业分类整理，聚焦煤炭开采相关上市公司。</p>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>股票代码</th>
+              <th>公司</th>
+              <th>地区</th>
+              <th>主营方向</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="code">000571.SZ</span></td><td><div class="company">新大洲A</div><div class="fullname">新大洲控股股份有限公司</div></td><td><span class="tag">海南</span></td><td>煤炭采掘业务</td></tr>
+            <tr><td><span class="code">000968.SZ</span></td><td><div class="company">蓝焰控股</div><div class="fullname">山西蓝焰控股股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤层气勘查、开发与利用及煤矿瓦斯治理</td></tr>
+            <tr><td><span class="code">600971.SH</span></td><td><div class="company">恒源煤电</div><div class="fullname">安徽恒源煤电股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭开采、洗选、运输、销售以及生产服务</td></tr>
+            <tr><td><span class="code">600546.SH</span></td><td><div class="company">山煤国际</div><div class="fullname">山煤国际能源集团股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产、销售物流及非煤贸易</td></tr>
+            <tr><td><span class="code">601918.SH</span></td><td><div class="company">新集能源</div><div class="fullname">中煤新集能源股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭开采、煤炭洗选与火力发电</td></tr>
+            <tr><td><span class="code">000552.SZ</span></td><td><div class="company">甘肃能化</div><div class="fullname">甘肃能化股份有限公司</div></td><td><span class="tag">甘肃</span></td><td>煤炭的开采、生产及销售</td></tr>
+            <tr><td><span class="code">601666.SH</span></td><td><div class="company">平煤股份</div><div class="fullname">平顶山天安煤业股份有限公司</div></td><td><span class="tag">河南</span></td><td>煤炭开采、洗选加工和销售</td></tr>
+            <tr><td><span class="code">600997.SH</span></td><td><div class="company">开滦股份</div><div class="fullname">开滦能源化工股份有限公司</div></td><td><span class="tag">河北</span></td><td>煤炭开采、原煤洗选、炼焦及煤化工</td></tr>
+            <tr><td><span class="code">600123.SH</span></td><td><div class="company">兰花科创</div><div class="fullname">山西兰花科技创业股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭、化肥、化工一体化业务</td></tr>
+            <tr><td><span class="code">600397.SH</span></td><td><div class="company">安源煤业</div><div class="fullname">安源煤业集团股份有限公司</div></td><td><span class="tag">江西</span></td><td>煤炭采选及经营、煤矿托管</td></tr>
+            <tr><td><span class="code">601101.SH</span></td><td><div class="company">昊华能源</div><div class="fullname">北京昊华能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、甲醇及铁路专用线运输</td></tr>
+            <tr><td><span class="code">600395.SH</span></td><td><div class="company">盘江股份</div><div class="fullname">贵州盘江精煤股份有限公司</div></td><td><span class="tag">贵州</span></td><td>煤炭开采、洗选加工、电力生产与销售</td></tr>
+            <tr><td><span class="code">600985.SH</span></td><td><div class="company">淮北矿业</div><div class="fullname">淮北矿业控股股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭采掘、洗选加工、销售及煤化工</td></tr>
+            <tr><td><span class="code">600508.SH</span></td><td><div class="company">上海能源</div><div class="fullname">上海大屯能源股份有限公司</div></td><td><span class="tag">上海</span></td><td>煤炭、铁路运输、火电及相关加工业务</td></tr>
+            <tr><td><span class="code">000983.SZ</span></td><td><div class="company">山西焦煤</div><div class="fullname">山西焦煤能源集团股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产、洗选加工、销售及发供电</td></tr>
+            <tr><td><span class="code">600403.SH</span></td><td><div class="company">大有能源</div><div class="fullname">河南大有能源股份有限公司</div></td><td><span class="tag">河南</span></td><td>原煤开采、煤炭批发与洗选加工</td></tr>
+            <tr><td><span class="code">600348.SH</span></td><td><div class="company">华阳股份</div><div class="fullname">山西华阳集团新能股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产销售，并布局电力与新能源</td></tr>
+            <tr><td><span class="code">000937.SZ</span></td><td><div class="company">冀中能源</div><div class="fullname">冀中能源股份有限公司</div></td><td><span class="tag">河北</span></td><td>煤炭、化工、电力、建材</td></tr>
+            <tr><td><span class="code">601898.SH</span></td><td><div class="company">中煤能源</div><div class="fullname">中国中煤能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、煤化工、煤矿装备及相关综合能源业务</td></tr>
+            <tr><td><span class="code">600188.SH</span></td><td><div class="company">兖矿能源</div><div class="fullname">兖矿能源集团股份有限公司</div></td><td><span class="tag">山东</span></td><td>煤炭、煤化工、机电装备与电热业务</td></tr>
+            <tr><td><span class="code">601699.SH</span></td><td><div class="company">潞安环能</div><div class="fullname">山西潞安环保能源开发股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭与焦炭产品生产销售</td></tr>
+            <tr><td><span class="code">600121.SH</span></td><td><div class="company">郑州煤电</div><div class="fullname">郑州煤电股份有限公司</div></td><td><span class="tag">河南</span></td><td>煤炭开采与销售及相关贸易业务</td></tr>
+            <tr><td><span class="code">600758.SH</span></td><td><div class="company">辽宁能源</div><div class="fullname">辽宁能源煤电产业股份有限公司</div></td><td><span class="tag">辽宁</span></td><td>煤炭开采、洗选加工及电热供应</td></tr>
+            <tr><td><span class="code">601001.SH</span></td><td><div class="company">晋控煤业</div><div class="fullname">晋能控股山西煤业股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产及销售</td></tr>
+            <tr><td><span class="code">601225.SH</span></td><td><div class="company">陕西煤业</div><div class="fullname">陕西煤业股份有限公司</div></td><td><span class="tag">陕西</span></td><td>煤炭开采、洗选、运输、销售及生产服务</td></tr>
+            <tr><td><span class="code">601088.SH</span></td><td><div class="company">中国神华</div><div class="fullname">中国神华能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、电力、运输及煤制烯烃</td></tr>
+            <tr><td><span class="code">002128.SZ</span></td><td><div class="company">电投能源</div><div class="fullname">内蒙古电投能源股份有限公司</div></td><td><span class="tag">内蒙古</span></td><td>煤炭、铝、火电及光伏风电新能源</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        数据说明：页面中的时间与日期会随浏览器本地时间自动更新。公司清单依据前瞻眼“煤炭开采（A股上市企业）”页面整理，当前页面收录 27 家，适合作为静态展示页而非投资建议依据。
+      </div>
+    </section>
+  </div>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const formatted = new Intl.DateTimeFormat("zh-CN", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      }).format(now);
+
+      document.getElementById("live-time").textContent = "当前时间：" + formatted + "（自动更新）";
+    }
+
+    updateTime();
+    setInterval(updateTime, 1000);
+  </script>
+</body>
+</html>
