@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -6,14 +6,15 @@
   <title>中邮煤炭</title>
   <style>
     :root {
-      --bg: #f5f0e8;
-      --paper: rgba(255, 250, 243, 0.92);
+      --bg: #f6efe5;
+      --paper: rgba(255, 250, 243, 0.94);
       --ink: #1f1a17;
       --muted: #74665b;
       --accent: #b04a22;
-      --accent-soft: rgba(176, 74, 34, 0.12);
-      --line: rgba(31, 26, 23, 0.1);
+      --line: rgba(31, 26, 23, 0.12);
       --shadow: 0 24px 60px rgba(73, 43, 20, 0.12);
+        --blue: #0070C0;
+        --red: #FF0000;
     }
 
     * {
@@ -23,28 +24,35 @@
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      font-family: "Times New Roman", "SimHei", "Heiti SC", serif;
       color: var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(176, 74, 34, 0.16), transparent 34%),
+        radial-gradient(circle at top left, rgba(176, 74, 34, 0.14), transparent 34%),
         radial-gradient(circle at bottom right, rgba(65, 48, 37, 0.14), transparent 28%),
         linear-gradient(135deg, #f8f3ec 0%, #eee5d8 50%, #e5d7c3 100%);
       padding: 40px 20px 56px;
     }
 
     .wrap {
-      max-width: 1160px;
+      max-width: 1180px;
       margin: 0 auto;
     }
 
-    .hero {
+    .hero,
+    .section {
       background: var(--paper);
       border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 28px;
       box-shadow: var(--shadow);
+    }
+
+    .hero {
       padding: 40px 32px 30px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
     }
 
     .hero::after {
@@ -62,29 +70,77 @@
       margin: 0;
       font-size: clamp(2.6rem, 5vw, 4.8rem);
       letter-spacing: 0.08em;
-      font-weight: 800;
+      font-weight: 900;
     }
 
     .subtitle {
-      margin-top: 10px;
+      margin-top: 0;
       color: var(--muted);
       font-size: 0.98rem;
       letter-spacing: 0.03em;
     }
 
     .stats {
-      margin-top: 26px;
+      margin-top: 0;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 14px;
     }
 
+    .stats.category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
     .stat {
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.62);
-      border: 1px solid var(--line);
-      backdrop-filter: blur(8px);
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.64);
+        border: 1px solid var(--line);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+      }
+
+      .stat-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+      }
+
+    .stats.category-nav .stat {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    .stats.category-nav .stat-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(176, 74, 34, 0.18);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 1.4rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .stats.category-nav .stat-link:hover {
+      background: rgba(176, 74, 34, 0.08);
+    }
+
+    .stats.category-nav .stat-link.is-active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(176, 74, 34, 0.18);
     }
 
     .stat-label {
@@ -95,16 +151,13 @@
     }
 
     .stat-value {
-      font-size: 1.28rem;
+      font-size: 1.2rem;
       font-weight: 700;
+      line-height: 1.35;
     }
 
     .section {
       margin-top: 24px;
-      background: var(--paper);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255, 255, 255, 0.5);
       overflow: hidden;
     }
 
@@ -117,9 +170,14 @@
       border-bottom: 1px solid var(--line);
     }
 
+    #dashboard-section .section-head {
+      border-bottom: 0;
+    }
+
     .section-head h2 {
       margin: 0;
       font-size: 1.4rem;
+      font-weight: 900;
     }
 
     .section-head p {
@@ -128,86 +186,291 @@
       font-size: 0.94rem;
     }
 
-    .table-wrap {
-      overflow-x: auto;
+    .index-card {
+      padding: 22px 28px 28px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 880px;
+    .index-title {
+      margin: 0 0 10px;
+      font-size: 1.52rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
     }
 
-    thead {
-      background: rgba(176, 74, 34, 0.08);
+    .index-legend {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
     }
 
-    th, td {
-      padding: 16px 18px;
-      text-align: left;
-      vertical-align: top;
-      border-bottom: 1px solid var(--line);
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.94rem;
+      font-weight: 700;
     }
 
-    th {
-      font-size: 0.86rem;
+    .legend-line {
+        position: relative;
+        display: inline-block;
+        width: 28px;
+        height: 12px;
+        flex: 0 0 28px;
+      }
+
+      .legend-fill {
+        display: inline-block;
+        width: 18px;
+        height: 10px;
+        flex: 0 0 18px;
+        border-radius: 2px;
+        background: currentColor;
+      }
+
+      .legend-line::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50%;
+        border-top: 3px solid currentColor;
+        border-radius: 999px;
+        transform: translateY(-50%);
+      }
+
+      .legend-marker {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        border: 1.8px solid currentColor;
+        border-radius: 50%;
+        background: #fffaf3;
+        transform: translate(-50%, -50%);
+      }
+
+    .index-subtitle {
+      margin: 0 0 14px;
       color: var(--muted);
-      font-weight: 700;
-      letter-spacing: 0.03em;
+      font-size: 0.94rem;
+      line-height: 1.6;
     }
 
-    tbody tr {
-      transition: transform 180ms ease, background-color 180ms ease;
-    }
-
-    tbody tr:hover {
-      background: rgba(255, 255, 255, 0.65);
-      transform: translateY(-1px);
-    }
-
-    .code {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-size: 0.84rem;
-      font-weight: 700;
-    }
-
-    .company {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .fullname {
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(31, 26, 23, 0.06);
-      font-size: 0.82rem;
-      color: #42362d;
-      white-space: nowrap;
-    }
+    .index-plot {
+        width: 100%;
+        min-height: 390px;
+        border-radius: 16px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(249,244,237,0.84));
+        border: 1px solid var(--line);
+        overflow: hidden;
+        padding: 0;
+      }
 
     .footer {
       padding: 18px 28px 26px;
       color: var(--muted);
       font-size: 0.88rem;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
-    @media (max-width: 720px) {
-      body {
-        padding: 24px 14px 40px;
+    .contact-note {
+      margin-top: 18px;
+      padding: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: left;
+      line-height: 1.75;
+    }
+
+    .dashboard-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .dashboard-meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tab-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 28px 18px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--ink);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 180ms ease;
+      font-family: inherit;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .sheet-panel {
+      display: none;
+      padding: 0 28px 28px;
+    }
+
+    .sheet-panel.active {
+      display: block;
+    }
+
+    .section-block + .section-block {
+      margin-top: 28px;
+    }
+
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 18px;
+    }
+
+    .category-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(176, 74, 34, 0.18);
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .category-link:hover {
+      background: rgba(176, 74, 34, 0.08);
+    }
+
+    .section-block h3 {
+      margin: 0 0 12px;
+      font-size: 1.02rem;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+    }
+
+    .subgroup-block + .subgroup-block {
+      margin-top: 18px;
+    }
+
+    .subgroup-title {
+      margin: 0 0 12px;
+      font-size: 0.96rem;
+      font-weight: 900;
+      color: var(--ink);
+    }
+
+    .chart-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
       }
+
+      .chart-grid.chart-grid-two-up {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+    .chart-card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 22px;
+      padding: 14px 14px 10px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-card h4 {
+      margin: 0 0 8px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-weight: 900;
+    }
+
+    .chart-card p {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .chart-legend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(96px, max-content));
+      justify-content: start;
+      gap: 6px 12px;
+      margin: 0 0 10px;
+    }
+
+    .chart-legend .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      font-size: 0.8rem;
+      font-weight: 700;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+      .chart-legend .legend-line {
+        width: 18px;
+        flex: 0 0 18px;
+        height: 10px;
+      }
+
+      .chart-legend .legend-fill {
+        width: 18px;
+        height: 10px;
+        flex: 0 0 18px;
+      }
+
+      .chart-legend .legend-line::before {
+        border-top-width: 2.5px;
+      }
+
+      .chart-legend .legend-marker {
+        width: 6px;
+        height: 6px;
+        border-width: 1.6px;
+      }
+
+    .chart-legend .legend-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 210px;
+      margin-top: auto;
+    }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 24px 14px 40px;
+        }
 
       .hero,
       .section {
@@ -218,14 +481,39 @@
         padding: 28px 20px 24px;
       }
 
-      .section-head {
-        padding: 22px 20px 16px;
+      .section-head,
+      .index-card {
+        padding-left: 20px;
+        padding-right: 20px;
       }
 
       .footer {
         padding: 16px 20px 22px;
       }
-    }
+
+      .tab-row,
+      .sheet-panel {
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+
+      .index-plot {
+        min-height: 310px;
+      }
+
+        .chart-legend {
+          grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+          gap: 6px 10px;
+        }
+
+        .chart-legend .legend-item {
+          font-size: 0.76rem;
+        }
+
+        .chart-grid.chart-grid-two-up {
+          grid-template-columns: 1fr;
+        }
+      }
   </style>
 </head>
 <body>
@@ -233,78 +521,49 @@
     <section class="hero">
       <h1>中邮煤炭</h1>
       <div class="subtitle" id="live-time">当前时间加载中...</div>
-      <div class="stats">
+      <div class="stats category-nav">
         <div class="stat">
-          <span class="stat-label">收录范围</span>
-          <span class="stat-value">A 股煤炭开采</span>
+          <a class="stat-link is-active" href="#board-index-section" data-nav-key="board-index">板块指数</a>
         </div>
         <div class="stat">
-          <span class="stat-label">公司数量</span>
-          <span class="stat-value">27 家</span>
-        </div>
-        <div class="stat">
-          <span class="stat-label">展示内容</span>
-          <span class="stat-value">代码 / 简称 / 主营</span>
+          <a class="stat-link" href="#dashboard-section" data-nav-key="dashboard">煤炭高频数据面板</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <h2>煤炭在 A 股的上市公司清单</h2>
-          <p>按较新的公开行业分类整理，聚焦煤炭开采相关上市公司。</p>
+    <section class="section" id="board-index-section">
+      <div class="index-card">
+        <h2 class="index-title">板块指数</h2>
+        <div class="index-legend">
+          <span class="legend-item" style="color:var(--blue);"><span class="legend-line"></span>沪深300</span>
+          <span class="legend-item" style="color:var(--red);"><span class="legend-line"></span>煤炭行业指数</span>
         </div>
+        <div class="index-plot" id="board-index-chart"></div>
       </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>股票代码</th>
-              <th>公司</th>
-              <th>地区</th>
-              <th>主营方向</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td><span class="code">000571.SZ</span></td><td><div class="company">新大洲A</div><div class="fullname">新大洲控股股份有限公司</div></td><td><span class="tag">海南</span></td><td>煤炭采掘业务</td></tr>
-            <tr><td><span class="code">000968.SZ</span></td><td><div class="company">蓝焰控股</div><div class="fullname">山西蓝焰控股股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤层气勘查、开发与利用及煤矿瓦斯治理</td></tr>
-            <tr><td><span class="code">600971.SH</span></td><td><div class="company">恒源煤电</div><div class="fullname">安徽恒源煤电股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭开采、洗选、运输、销售以及生产服务</td></tr>
-            <tr><td><span class="code">600546.SH</span></td><td><div class="company">山煤国际</div><div class="fullname">山煤国际能源集团股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产、销售物流及非煤贸易</td></tr>
-            <tr><td><span class="code">601918.SH</span></td><td><div class="company">新集能源</div><div class="fullname">中煤新集能源股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭开采、煤炭洗选与火力发电</td></tr>
-            <tr><td><span class="code">000552.SZ</span></td><td><div class="company">甘肃能化</div><div class="fullname">甘肃能化股份有限公司</div></td><td><span class="tag">甘肃</span></td><td>煤炭的开采、生产及销售</td></tr>
-            <tr><td><span class="code">601666.SH</span></td><td><div class="company">平煤股份</div><div class="fullname">平顶山天安煤业股份有限公司</div></td><td><span class="tag">河南</span></td><td>煤炭开采、洗选加工和销售</td></tr>
-            <tr><td><span class="code">600997.SH</span></td><td><div class="company">开滦股份</div><div class="fullname">开滦能源化工股份有限公司</div></td><td><span class="tag">河北</span></td><td>煤炭开采、原煤洗选、炼焦及煤化工</td></tr>
-            <tr><td><span class="code">600123.SH</span></td><td><div class="company">兰花科创</div><div class="fullname">山西兰花科技创业股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭、化肥、化工一体化业务</td></tr>
-            <tr><td><span class="code">600397.SH</span></td><td><div class="company">安源煤业</div><div class="fullname">安源煤业集团股份有限公司</div></td><td><span class="tag">江西</span></td><td>煤炭采选及经营、煤矿托管</td></tr>
-            <tr><td><span class="code">601101.SH</span></td><td><div class="company">昊华能源</div><div class="fullname">北京昊华能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、甲醇及铁路专用线运输</td></tr>
-            <tr><td><span class="code">600395.SH</span></td><td><div class="company">盘江股份</div><div class="fullname">贵州盘江精煤股份有限公司</div></td><td><span class="tag">贵州</span></td><td>煤炭开采、洗选加工、电力生产与销售</td></tr>
-            <tr><td><span class="code">600985.SH</span></td><td><div class="company">淮北矿业</div><div class="fullname">淮北矿业控股股份有限公司</div></td><td><span class="tag">安徽</span></td><td>煤炭采掘、洗选加工、销售及煤化工</td></tr>
-            <tr><td><span class="code">600508.SH</span></td><td><div class="company">上海能源</div><div class="fullname">上海大屯能源股份有限公司</div></td><td><span class="tag">上海</span></td><td>煤炭、铁路运输、火电及相关加工业务</td></tr>
-            <tr><td><span class="code">000983.SZ</span></td><td><div class="company">山西焦煤</div><div class="fullname">山西焦煤能源集团股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产、洗选加工、销售及发供电</td></tr>
-            <tr><td><span class="code">600403.SH</span></td><td><div class="company">大有能源</div><div class="fullname">河南大有能源股份有限公司</div></td><td><span class="tag">河南</span></td><td>原煤开采、煤炭批发与洗选加工</td></tr>
-            <tr><td><span class="code">600348.SH</span></td><td><div class="company">华阳股份</div><div class="fullname">山西华阳集团新能股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产销售，并布局电力与新能源</td></tr>
-            <tr><td><span class="code">000937.SZ</span></td><td><div class="company">冀中能源</div><div class="fullname">冀中能源股份有限公司</div></td><td><span class="tag">河北</span></td><td>煤炭、化工、电力、建材</td></tr>
-            <tr><td><span class="code">601898.SH</span></td><td><div class="company">中煤能源</div><div class="fullname">中国中煤能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、煤化工、煤矿装备及相关综合能源业务</td></tr>
-            <tr><td><span class="code">600188.SH</span></td><td><div class="company">兖矿能源</div><div class="fullname">兖矿能源集团股份有限公司</div></td><td><span class="tag">山东</span></td><td>煤炭、煤化工、机电装备与电热业务</td></tr>
-            <tr><td><span class="code">601699.SH</span></td><td><div class="company">潞安环能</div><div class="fullname">山西潞安环保能源开发股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭与焦炭产品生产销售</td></tr>
-            <tr><td><span class="code">600121.SH</span></td><td><div class="company">郑州煤电</div><div class="fullname">郑州煤电股份有限公司</div></td><td><span class="tag">河南</span></td><td>煤炭开采与销售及相关贸易业务</td></tr>
-            <tr><td><span class="code">600758.SH</span></td><td><div class="company">辽宁能源</div><div class="fullname">辽宁能源煤电产业股份有限公司</div></td><td><span class="tag">辽宁</span></td><td>煤炭开采、洗选加工及电热供应</td></tr>
-            <tr><td><span class="code">601001.SH</span></td><td><div class="company">晋控煤业</div><div class="fullname">晋能控股山西煤业股份有限公司</div></td><td><span class="tag">山西</span></td><td>煤炭生产及销售</td></tr>
-            <tr><td><span class="code">601225.SH</span></td><td><div class="company">陕西煤业</div><div class="fullname">陕西煤业股份有限公司</div></td><td><span class="tag">陕西</span></td><td>煤炭开采、洗选、运输、销售及生产服务</td></tr>
-            <tr><td><span class="code">601088.SH</span></td><td><div class="company">中国神华</div><div class="fullname">中国神华能源股份有限公司</div></td><td><span class="tag">北京</span></td><td>煤炭、电力、运输及煤制烯烃</td></tr>
-            <tr><td><span class="code">002128.SZ</span></td><td><div class="company">电投能源</div><div class="fullname">内蒙古电投能源股份有限公司</div></td><td><span class="tag">内蒙古</span></td><td>煤炭、铝、火电及光伏风电新能源</td></tr>
-          </tbody>
-        </table>
-      </div>
-
       <div class="footer">
-        数据说明：页面中的时间与日期会随浏览器本地时间自动更新。公司清单依据前瞻眼“煤炭开采（A股上市企业）”页面整理，当前页面收录 27 家，适合作为静态展示页而非投资建议依据。
+        数据来源说明：板块指数图读取本机 `iFnD数据.xlsx` 中的相关数据。沪深300取“沪深300”，煤炭行业指数取“煤炭”，图中保留近一年内每个交易日的数据点，并按月显示时间坐标。      </div>
+    </section>
+
+    <section class="section" id="dashboard-section">
+      <div class="section-head dashboard-head">
+        <div>
+          <h2>煤炭高频数据面板</h2>
+          <p>内容来自 Excel 中的“动力煤高频精选”和“炼焦煤高频精选”两个 sheet。</p>
+        </div>
+        <div class="dashboard-meta" id="dashboard-meta">数据源加载中...</div>
+      </div>
+      <div class="tab-row" id="sheet-tabs"></div>
+      <div id="sheet-panels"></div>
+      <div class="footer">
+        更新方式：当前页面读取同目录下的 <span style="font-family:'Times New Roman', serif;">coal_dashboard_data.js</span>。当 Excel 文件更新后，重新执行同步脚本并重新发布页面，即可把最新图表带到该网址中。
+        <div class="contact-note">联系人：邱达治</div>
       </div>
     </section>
-  </div>
 
+    </div>
+
+  <script src="./board_index_data.js"></script>
+  <script src="./coal_dashboard_data.js"></script>
   <script>
     function updateTime() {
       const now = new Date();
@@ -322,8 +581,1426 @@
       document.getElementById("live-time").textContent = "当前时间：" + formatted + "（自动更新）";
     }
 
+    function axisTicks(min, max, count) {
+      const ticks = [];
+      const step = (max - min) / count;
+      for (let i = 0; i <= count; i++) {
+        ticks.push(min + step * i);
+      }
+      return ticks;
+    }
+
+    function renderBoardIndexChart() {
+      const plot = document.getElementById("board-index-chart");
+      if (!plot) {
+        return;
+      }
+
+      const source = window.BOARD_INDEX_DATA;
+      if (!source || !source.labels || !source.hs300 || !source.coal || !source.labels.length) {
+        plot.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#74665b;font-size:0.96rem;padding:24px;text-align:center;">等待板块指数数据同步后显示图表</div>';
+        return;
+      }
+
+      const labels = source.labels;
+      const hs300 = source.hs300;
+      const coal = source.coal;
+      const monthTicks = source.monthTicks || [];
+
+      const width = 980;
+      const height = 420;
+      const pad = { top: 24, right: 70, bottom: 42, left: 70 };
+      const innerWidth = width - pad.left - pad.right;
+      const innerHeight = height - pad.top - pad.bottom;
+
+        const axisBounds = source.axisBounds || {};
+        const leftMin = axisBounds.leftMin ?? (Math.floor((Math.min.apply(null, hs300) - 2) / 2) * 2);
+        const leftMax = axisBounds.leftMax ?? (Math.ceil((Math.max.apply(null, hs300) + 2) / 2) * 2);
+        const rightMin = axisBounds.rightMin ?? (Math.floor((Math.min.apply(null, coal) - 2) / 2) * 2);
+        const rightMax = axisBounds.rightMax ?? (Math.ceil((Math.max.apply(null, coal) + 2) / 2) * 2);
+
+      function xPos(index) {
+        return pad.left + innerWidth * index / Math.max(1, labels.length - 1);
+      }
+
+      function yLeft(value) {
+        return pad.top + innerHeight * (leftMax - value) / Math.max(1, leftMax - leftMin);
+      }
+
+      function yRight(value) {
+        return pad.top + innerHeight * (rightMax - value) / Math.max(1, rightMax - rightMin);
+      }
+
+      function polyline(values, yFn) {
+        return values.map(function (value, index) {
+          return xPos(index).toFixed(2) + "," + yFn(value).toFixed(2);
+        }).join(" ");
+      }
+
+      let svg = '<svg viewBox="0 0 ' + width + ' ' + height + '" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">';
+      svg += '<rect x="0" y="0" width="' + width + '" height="' + height + '" fill="transparent" />';
+
+      axisTicks(leftMin, leftMax, 4).forEach(function (tick) {
+        const y = yLeft(tick);
+        svg += '<text x="' + (pad.left - 10) + '" y="' + (y + 4) + '" text-anchor="end" font-size="12" font-weight="700" fill="' + getComputedStyle(document.documentElement).getPropertyValue("--blue").trim() + '">' + tick.toFixed(0) + '</text>';
+          svg += '<line x1="' + pad.left + '" y1="' + y + '" x2="' + (pad.left + 8) + '" y2="' + y + '" stroke="#0070C0" stroke-width="1.4"/>';
+      });
+
+      axisTicks(rightMin, rightMax, 4).forEach(function (tick) {
+        const y = yRight(tick);
+        svg += '<text x="' + (width - pad.right + 10) + '" y="' + (y + 4) + '" text-anchor="start" font-size="12" font-weight="700" fill="' + getComputedStyle(document.documentElement).getPropertyValue("--red").trim() + '">' + tick.toFixed(0) + '</text>';
+          svg += '<line x1="' + (width - pad.right - 8) + '" y1="' + y + '" x2="' + (width - pad.right) + '" y2="' + y + '" stroke="#FF0000" stroke-width="1.4"/>';
+      });
+
+      monthTicks.forEach(function (tick) {
+        const x = xPos(tick.index);
+        svg += '<line x1="' + x + '" y1="' + (height - pad.bottom) + '" x2="' + x + '" y2="' + (height - pad.bottom - 8) + '" stroke="#000000" stroke-width="1.2"/>';
+        svg += '<text x="' + x + '" y="' + (height - 12) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#000000">' + tick.label + '</text>';
+      });
+
+        svg += '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (height - pad.bottom) + '" stroke="#0070C0" stroke-width="1.2"/>';
+        svg += '<line x1="' + (width - pad.right) + '" y1="' + pad.top + '" x2="' + (width - pad.right) + '" y2="' + (height - pad.bottom) + '" stroke="#FF0000" stroke-width="1.2"/>';
+      svg += '<line x1="' + pad.left + '" y1="' + (height - pad.bottom) + '" x2="' + (width - pad.right) + '" y2="' + (height - pad.bottom) + '" stroke="#000000" stroke-width="1.2"/>';
+
+        svg += '<polyline fill="none" stroke="#0070C0" stroke-width="3" points="' + polyline(hs300, yLeft) + '"/>';
+        svg += '<polyline fill="none" stroke="#FF0000" stroke-width="3" points="' + polyline(coal, yRight) + '"/>';
+
+      svg += '</svg>';
+      plot.innerHTML = svg;
+    }
+
+        function groupBySection(charts) {
+        const grouped = [];
+        const map = new Map();
+
+        for (const chart of charts) {
+          if (shouldHideChart(chart)) {
+            continue;
+          }
+          const key = chart.section || "未分类";
+          if (!map.has(key)) {
+            const bucket = { section: key, charts: [] };
+            map.set(key, bucket);
+            grouped.push(bucket);
+        }
+        map.get(key).charts.push(chart);
+      }
+
+      return grouped;
+    }
+
+      function normalizeSectionName(value) {
+        return String(value || "").replace(/\s+/g, "");
+      }
+
+      function chartDisplayName(chart) {
+        return String((chart && (chart.displayTitle || chart.title)) || "");
+      }
+
+      function shouldHideChart(chart) {
+        return [
+          "大秦铁路发运量（日度，万吨）",
+          "北方8港库存（不含黄骅港，万吨）"
+        ].indexOf(chartDisplayName(chart)) >= 0;
+      }
+
+    function buildPowerCoalCategories(charts) {
+        const blueprint = [
+          { key: "price", label: "价格", groups: ["国内价格", "国外价格"] },
+          { key: "supply", label: "供给", groups: ["国内供给", "进口供给"] },
+          { key: "inventory", label: "库存", groups: ["上游库存", "下游库存"] },
+        { key: "transport", label: "运耗", groups: ["港口拉运", "电厂日耗"] },
+        { key: "days", label: "可用天数", groups: ["可用天数"] },
+        { key: "downstream", label: "下游运营", groups: ["水泥", "甲醇", "尿素"] },
+        { key: "energy", label: "其他能源", groups: ["水电", "石油天然气"] }
+      ];
+
+      const categoryMap = new Map();
+      blueprint.forEach(function (item) {
+        categoryMap.set(item.label, {
+          key: item.key,
+          label: item.label,
+          groups: item.groups.map(function (group) {
+            return { label: group, charts: [] };
+          })
+        });
+      });
+
+      function pushTo(categoryLabel, groupLabel, chart) {
+        const category = categoryMap.get(categoryLabel);
+        if (!category) {
+          return;
+        }
+        const targetGroup = category.groups.find(function (group) {
+          return group.label === groupLabel;
+        });
+        if (targetGroup) {
+          targetGroup.charts.push(chart);
+        }
+      }
+
+        charts.forEach(function (chart) {
+          if (shouldHideChart(chart)) {
+            return;
+          }
+          const section = normalizeSectionName(chart.section);
+          const title = chartDisplayName(chart);
+
+        if (section === "价格" || section === "价 格") {
+          if (/印尼|澳大利亚|FOB|ARA|纽卡斯尔|欧洲/i.test(title)) {
+            pushTo("价格", "国外价格", chart);
+          } else {
+            pushTo("价格", "国内价格", chart);
+          }
+          return;
+        }
+
+        if (section === "国内供给") {
+          pushTo("供给", "国内供给", chart);
+          return;
+        }
+
+        if (section === "进口供给") {
+          pushTo("供给", "进口供给", chart);
+          return;
+        }
+
+        if (section === "上游库存" || section === "下游库存") {
+          pushTo("库存", section, chart);
+          return;
+        }
+
+        if (section === "港口拉运" || section === "电厂日耗") {
+          pushTo("运耗", section, chart);
+          return;
+        }
+
+        if (section === "可用天数") {
+          pushTo("可用天数", "可用天数", chart);
+          return;
+        }
+
+        if (section === "水泥" || section === "甲醇" || section === "尿素") {
+          pushTo("下游运营", section, chart);
+          return;
+        }
+
+        if (section === "水电" || section === "石油天然气") {
+          pushTo("其他能源", section, chart);
+        }
+      });
+
+      return blueprint.map(function (item) {
+        const category = categoryMap.get(item.label);
+        category.groups = category.groups.filter(function (group) {
+          return group.charts.length > 0;
+        });
+        return category;
+        }).filter(function (category) {
+          return category.groups.length > 0;
+        });
+      }
+
+      function buildCokingCoalCategories(charts) {
+        const blueprint = [
+          { key: "price", label: "价格", groups: ["价格"] },
+          { key: "supply", label: "供给", groups: ["国内供给", "进口供给"] },
+          { key: "inventory", label: "库存", groups: ["总库存", "上游库存", "中游库存", "下游库存"] },
+          { key: "freight", label: "运费", groups: ["运费"] },
+          { key: "downstream", label: "下游运营", groups: ["焦化厂开工", "钢厂铁水、开工", "钢厂粗钢、钢材", "钢厂盈利", "钢材库存"] },
+          { key: "energy", label: "其他能源", groups: ["其他能源"] }
+        ];
+
+        const categoryMap = new Map();
+        blueprint.forEach(function (item) {
+          categoryMap.set(item.label, {
+            key: item.key,
+            label: item.label,
+            groups: item.groups.map(function (group) {
+              return { label: group, charts: [] };
+            })
+          });
+        });
+
+        function pushTo(categoryLabel, groupLabel, chart) {
+          const category = categoryMap.get(categoryLabel);
+          if (!category) {
+            return;
+          }
+          const targetGroup = category.groups.find(function (group) {
+            return group.label === groupLabel;
+          });
+          if (targetGroup) {
+            targetGroup.charts.push(chart);
+          }
+        }
+
+        charts.forEach(function (chart) {
+          if (shouldHideChart(chart)) {
+            return;
+          }
+
+          const section = normalizeSectionName(chart.section);
+
+          if (section === "价格") {
+            pushTo("价格", "价格", chart);
+            return;
+          }
+
+          if (section === "国内供给" || section === "进口供给") {
+            pushTo("供给", section, chart);
+            return;
+          }
+
+          if (section === "总库存" || section === "上游库存" || section === "中游库存" || section === "下游库存") {
+            pushTo("库存", section, chart);
+            return;
+          }
+
+          if (section === "运费") {
+            pushTo("运费", "运费", chart);
+            return;
+          }
+
+          if (
+            section === "焦化厂开工" ||
+            section === "钢厂铁水、开工" ||
+            section === "钢厂粗钢、钢材" ||
+            section === "钢厂盈利" ||
+            section === "钢材库存"
+          ) {
+            pushTo("下游运营", section, chart);
+            return;
+          }
+
+          pushTo("其他能源", "其他能源", chart);
+        });
+
+        return blueprint.map(function (item) {
+          const category = categoryMap.get(item.label);
+          category.groups = category.groups.filter(function (group) {
+            return group.charts.length > 0;
+          });
+          return category;
+        }).filter(function (category) {
+          return category.groups.length > 0;
+        });
+      }
+
+    function datasetColor(color, alpha) {
+      if (!color || !color.startsWith("#") || color.length !== 7) {
+        return alpha === 1 ? "#b04a22" : "rgba(176,74,34,0.16)";
+      }
+      const r = parseInt(color.slice(1, 3), 16);
+      const g = parseInt(color.slice(3, 5), 16);
+      const b = parseInt(color.slice(5, 7), 16);
+      return alpha === 1 ? color : "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+    }
+
+    function getSeriesBoundsFromDatasets(datasets, includeZero) {
+      const values = [];
+      (datasets || []).forEach(function (dataset) {
+        dataset.data.forEach(function (value) {
+          if (typeof value === "number" && !Number.isNaN(value)) {
+            values.push(value);
+          }
+        });
+      });
+
+      if (!values.length) {
+        return { min: 0, max: 1 };
+      }
+
+      let min = Math.min.apply(null, values);
+      let max = Math.max.apply(null, values);
+      if (includeZero) {
+        if (min > 0) {
+          min = 0;
+        }
+        if (max < 0) {
+          max = 0;
+        }
+      }
+      if (min === max) {
+        min -= 1;
+        max += 1;
+      }
+
+      const padding = (max - min) * 0.08;
+      return { min: min - padding, max: max + padding };
+    }
+
+    function getSeriesBounds(chart) {
+      return getSeriesBoundsFromDatasets(chart.datasets || [], false);
+    }
+
+        function getDisplayChart(chart) {
+      return JSON.parse(JSON.stringify(chart));
+    }
+
+    function getDisplayChartV2(chart) {
+      const cloned = JSON.parse(JSON.stringify(chart));
+      const yearColors = {
+        "2021": "#FFFF00",
+        "2022": "#929292",
+        "2023": "#00B0F0",
+        "2024": "#FFC000",
+        "2025": "#0070C0",
+        "2026": "#FF0000"
+      };
+
+      if (cloned.displayTitle) {
+        cloned.title = cloned.displayTitle;
+      }
+
+      if (Array.isArray(cloned.datasets)) {
+        cloned.datasets.forEach(function (dataset) {
+          if (yearColors[dataset.label]) {
+            dataset.color = yearColors[dataset.label];
+          }
+        });
+      }
+
+      return cloned;
+    }
+
+    function isNumericValue(value) {
+      return typeof value === "number" && !Number.isNaN(value);
+    }
+
+    function normalizeDateLabel(label) {
+      const text = String(label || "").trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+        return text;
+      }
+      const matched = text.match(/^(\d{4}-\d{2}-\d{2})/);
+      if (matched) {
+        return matched[1];
+      }
+      return null;
+    }
+
+      function getChartSpecificRangeStart(chartTitle) {
+        if ([
+          "京唐港主焦煤价格（元/吨）",
+          "主焦煤长协价（元/吨）",
+          "进口炼焦煤VS国内主焦煤（元/吨）"
+        ].indexOf(chartTitle) >= 0) {
+          return "2024-01-01";
+        }
+        if (chartTitle === "焦煤期现对比（元/吨）") {
+          return "2024-08-01";
+        }
+        return null;
+      }
+
+      function shouldUseYearMonthAxisLabel(chart) {
+        const title = String((chart && chart.title) || "");
+        return [
+          "进口3800大卡印尼煤炭价差",
+          "京唐港主焦煤价格（元/吨）",
+          "主焦煤长协价（元/吨）",
+          "进口炼焦煤VS国内主焦煤（元/吨）",
+          "焦煤期现对比（元/吨）",
+          "30家独立焦化厂吨焦利润（元/吨）",
+          "螺纹钢利润测算（元/吨）"
+        ].indexOf(title) >= 0;
+      }
+
+      function normalizeTimelineChart(chart) {
+        const cloned = JSON.parse(JSON.stringify(chart));
+        const chartTitle = String((cloned && cloned.title) || "");
+        const labels = Array.isArray(cloned.labels) ? cloned.labels.slice() : [];
+        const datasets = Array.isArray(cloned.datasets) ? cloned.datasets.map(function (dataset) {
+          return {
+            ...dataset,
+            data: Array.isArray(dataset.data) ? dataset.data.slice() : []
+          };
+        }) : [];
+        let normalizedLabels = labels.map(normalizeDateLabel);
+
+      if (datasets.length === 1) {
+          const hasDateLabels = normalizedLabels.some(function (value) {
+            return Boolean(value);
+          });
+        if (hasDateLabels) {
+          const rangeStart = "2024-01-01";
+          const today = new Date();
+          const todayKey = [
+            today.getFullYear(),
+            String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+          ].join("-");
+          const filteredLabels = [];
+          const filteredData = [];
+
+          normalizedLabels.forEach(function (dateLabel, index) {
+            const value = datasets[0].data[index];
+            if (!dateLabel || !isNumericValue(value)) {
+              return;
+            }
+            if (dateLabel < rangeStart || dateLabel > todayKey) {
+              return;
+            }
+            filteredLabels.push(dateLabel);
+            filteredData.push(value);
+          });
+
+          if (filteredLabels.length) {
+            if (filteredLabels[0] > filteredLabels[filteredLabels.length - 1]) {
+              filteredLabels.reverse();
+              filteredData.reverse();
+            }
+            cloned.labels = filteredLabels;
+            cloned.datasets = [
+              {
+                ...datasets[0],
+                data: filteredData
+              }
+            ];
+            return cloned;
+          }
+        }
+      }
+
+        const firstValidDate = normalizedLabels.find(function (value) {
+          return Boolean(value);
+        });
+        let lastValidDate = null;
+        for (let i = normalizedLabels.length - 1; i >= 0; i -= 1) {
+          if (normalizedLabels[i]) {
+            lastValidDate = normalizedLabels[i];
+            break;
+          }
+        }
+
+        if (labels.length > 1 && firstValidDate && lastValidDate) {
+          if (firstValidDate > lastValidDate) {
+            labels.reverse();
+            normalizedLabels.reverse();
+            datasets.forEach(function (dataset) {
+              dataset.data.reverse();
+            });
+          }
+        }
+
+        const isDateLikeLabels = Boolean(firstValidDate && lastValidDate);
+
+          let start = 0;
+          let end = labels.length - 1;
+          const customRangeStart = getChartSpecificRangeStart(chartTitle);
+
+          const shouldClampRecentDateRange = isDateLikeLabels && (
+            cloned.datasets.length === 1 ||
+            shouldClampToRecentDateRange(cloned) ||
+            Boolean(customRangeStart)
+          );
+
+          if (shouldClampRecentDateRange) {
+            const rangeStart = customRangeStart || "2024-01-01";
+            const today = new Date();
+            const todayKey = [
+              today.getFullYear(),
+              String(today.getMonth() + 1).padStart(2, "0"),
+            String(today.getDate()).padStart(2, "0")
+          ].join("-");
+
+          while (start <= end && (!normalizedLabels[start] || normalizedLabels[start] < rangeStart)) {
+            start += 1;
+          }
+          while (end >= start && (!normalizedLabels[end] || normalizedLabels[end] > todayKey)) {
+            end -= 1;
+          }
+        }
+
+      while (start <= end && datasets.length && datasets.every(function (dataset) {
+        return !isNumericValue(dataset.data[start]);
+      })) {
+        start += 1;
+      }
+
+      while (end >= start && datasets.length && datasets.every(function (dataset) {
+        return !isNumericValue(dataset.data[end]);
+      })) {
+        end -= 1;
+      }
+
+      if (start > 0 || end < labels.length - 1) {
+        cloned.labels = labels.slice(start, end + 1);
+        cloned.datasets = datasets.map(function (dataset) {
+          return {
+            ...dataset,
+            data: dataset.data.slice(start, end + 1)
+          };
+        });
+      } else {
+        cloned.labels = labels;
+        cloned.datasets = datasets;
+      }
+
+      return cloned;
+    }
+
+    function shouldForceTwoDecimalLabel(chart) {
+      const title = String((chart && chart.title) || "");
+      return [
+        "印尼3800大卡动力煤FOB价（美元/吨）",
+        "澳大利亚6000大卡动力煤FOB价（美元/吨）",
+        "布伦特原油期货结算价（美元/桶）",
+        "英国天然气期货结算价（便士/色姆）"
+      ].indexOf(title) >= 0;
+    }
+
+    function shouldFormatYAxisAsPercent(chart) {
+      return [
+        "462家煤矿产能利用率",
+        "水泥熟料产能利用率",
+        "水泥熟料库容比",
+        "甲醇开工率",
+        "煤制尿素开工率",
+        "523家炼焦煤矿山产能利用率",
+        "314家洗煤厂开工率",
+        "230家独立焦化厂开工率",
+        "钢厂高炉开工率",
+        "247家钢厂盈利率"
+      ].indexOf(String((chart && chart.title) || "")) >= 0;
+    }
+
+    function getFixedYAxisConfig(chart) {
+      if (String((chart && chart.title) || "") === "462家煤矿产能利用率") {
+        return {
+          min: 0.70,
+          max: 1.05,
+          ticks: [0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00, 1.05]
+        };
+      }
+      return null;
+    }
+
+    function formatYAxisTick(value, chart) {
+      if (!isNumericValue(value)) {
+        return "";
+      }
+      if (shouldFormatYAxisAsPercent(chart)) {
+          return (value * 100).toFixed(0) + "%";
+      }
+      return value.toFixed(0);
+    }
+
+      function formatTimeAxisLabel(label, chart) {
+        const normalized = normalizeDateLabel(label);
+        if (!normalized) {
+          return String(label || "");
+      }
+        const parts = normalized.split("-");
+        if (parts.length !== 3) {
+          return normalized;
+        }
+          if (shouldUseYearMonthAxisLabel(chart)) {
+            return parts[0].slice(2) + "/" + parts[1];
+          }
+        if (Array.isArray(chart.datasets) && chart.datasets.length === 1) {
+          return parts[0].slice(2) + "/" + parts[1];
+          }
+          return parts[1] + "月";
+        }
+
+       function shouldUseZeroCenteredTimeAxis(chart) {
+         return [
+           "进口3800大卡印尼煤炭价差",
+           "30家独立焦化厂吨焦利润（元/吨）",
+           "螺纹钢利润测算（元/吨）"
+         ].indexOf(String((chart && chart.title) || "")) >= 0;
+       }
+
+       function shouldUseBetweenTickMarks(chart) {
+         return false;
+       }
+
+       function getPreferredTimeTickCount(chart, labelsLength) {
+         if (shouldUseZeroCenteredTimeAxis(chart)) {
+           return Math.min(8, labelsLength);
+         }
+         return Math.min(6, labelsLength);
+        }
+
+      function shouldClampToRecentDateRange(chart) {
+        return [
+          "进口3800大卡印尼煤炭价差",
+          "30家独立焦化厂吨焦利润（元/吨）",
+          "螺纹钢利润测算（元/吨）"
+        ].indexOf(String((chart && chart.title) || "")) >= 0;
+      }
+
+      function shouldShow2026Markers(chart) {
+        const title = String((chart && chart.title) || "");
+        return [
+          "三峡水位（米）",
+        "三峡出库流量（立方米/秒）",
+        "沿海6大发电集团可用天数（天）",
+        "沿海6大发电集团日耗（万吨）",
+        "北方港口锚地船舶数量（艘）",
+        "沿海6大发电集团库存（万吨）",
+        "北方9港库存（万吨）",
+        "螺纹钢利润测算（元/吨）"
+        ].indexOf(title) < 0;
+      }
+
+      function shouldShowLegendMarker(chart, dataset) {
+        return Boolean(
+          chart &&
+          dataset &&
+          Array.isArray(chart.datasets) &&
+          chart.datasets.length > 1 &&
+          String(dataset.label || "") === "2026" &&
+          shouldShow2026Markers(chart)
+        );
+      }
+
+    function shouldForceZeroDecimalSeriesLabel(chart, datasetLabel) {
+      return (
+        String((chart && chart.title) || "") === "焦煤期现对比（元/吨）" &&
+        String(datasetLabel || "") === "焦煤现货价格（山西中硫主焦煤）"
+      );
+    }
+
+    function shouldForceOneDecimalSeriesLabel(chart, datasetLabel) {
+      return (
+        String((chart && chart.title) || "") === "焦煤期现对比（元/吨）" &&
+        String(datasetLabel || "") === "焦煤期货（活跃）收盘价"
+      );
+    }
+
+    function formatChartValue(value, chart, datasetLabel) {
+      if (!isNumericValue(value)) {
+        return "";
+      }
+      if (shouldForceZeroDecimalSeriesLabel(chart, datasetLabel)) {
+        return value.toFixed(0);
+      }
+      if (shouldForceOneDecimalSeriesLabel(chart, datasetLabel)) {
+        return value.toFixed(1);
+      }
+      if (shouldForceTwoDecimalLabel(chart)) {
+        return value.toFixed(2);
+      }
+      if (Math.abs(value) >= 100 || Number.isInteger(value)) {
+        return value.toFixed(0);
+      }
+      return value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
+    }
+
+      function shouldShowSingleSeriesLegend(chart) {
+        const title = String((chart && chart.title) || "");
+        return [
+          "布伦特原油期货结算价（美元/桶）",
+          "英国天然气期货结算价（便士/色姆）"
+        ].indexOf(title) >= 0;
+      }
+
+      function shouldShowLatestSeriesValueLabels(chart) {
+        const title = String((chart && chart.title) || "");
+        return [
+          "京唐港主焦煤价格（元/吨）",
+          "主焦煤长协价（元/吨）",
+          "进口炼焦煤VS国内主焦煤（元/吨）",
+          "焦煤期现对比（元/吨）"
+        ].indexOf(title) >= 0;
+      }
+
+      function shouldPlaceLatestSeriesLabelsBelowPoint(chart) {
+        return String((chart && chart.title) || "") === "焦煤期现对比（元/吨）";
+      }
+
+      function getFixedSingleSeriesLabelAxisValue(chart) {
+        if (String((chart && chart.title) || "") === "焦煤到港口运费（元/吨）") {
+          return 180;
+        }
+        return null;
+      }
+
+      function distributeLabelPositions(points, topBound, bottomBound, gap) {
+        if (!points.length) {
+          return [];
+        }
+
+        const sorted = points.slice().sort(function (a, b) {
+          return a.pointY - b.pointY;
+        });
+
+        sorted.forEach(function (point, index) {
+          const minY = index === 0 ? topBound : sorted[index - 1].labelY + gap;
+          point.labelY = Math.max(point.pointY, minY);
+        });
+
+        if (sorted[sorted.length - 1].labelY > bottomBound) {
+          sorted[sorted.length - 1].labelY = bottomBound;
+          for (let i = sorted.length - 2; i >= 0; i -= 1) {
+            sorted[i].labelY = Math.min(sorted[i].labelY, sorted[i + 1].labelY - gap);
+          }
+        }
+
+        if (sorted[0].labelY < topBound) {
+          sorted[0].labelY = topBound;
+          for (let i = 1; i < sorted.length; i += 1) {
+            sorted[i].labelY = Math.max(sorted[i].labelY, sorted[i - 1].labelY + gap);
+          }
+          if (sorted[sorted.length - 1].labelY > bottomBound) {
+            const overflow = sorted[sorted.length - 1].labelY - bottomBound;
+            sorted.forEach(function (point) {
+              point.labelY -= overflow;
+            });
+          }
+        }
+
+        return sorted;
+      }
+
+      function distributeLowerLabelPositions(points, bottomBound, gap) {
+        if (!points.length) {
+          return [];
+        }
+
+        const sorted = points.slice().sort(function (a, b) {
+          return a.pointY - b.pointY;
+        });
+
+        sorted.forEach(function (point, index) {
+          const preferredY = point.pointY + 16;
+          const minY = index === 0 ? preferredY : Math.max(preferredY, sorted[index - 1].labelY + gap);
+          point.labelY = minY;
+        });
+
+        if (sorted[sorted.length - 1].labelY > bottomBound) {
+          const overflow = sorted[sorted.length - 1].labelY - bottomBound;
+          sorted.forEach(function (point) {
+            point.labelY -= overflow;
+          });
+          sorted.forEach(function (point, index) {
+            const minY = point.pointY + 16;
+            point.labelY = Math.max(point.labelY, minY);
+            if (index > 0) {
+              point.labelY = Math.max(point.labelY, sorted[index - 1].labelY + gap);
+            }
+          });
+        }
+
+        return sorted;
+      }
+
+      function renderSimpleChart(container, chart) {
+        chart = normalizeTimelineChart(getDisplayChartV2(chart));
+        const chartTitle = String((chart && chart.title) || "");
+        const width = 520;
+        const height = 210;
+      const leftAxisDatasets = (chart.datasets || []).filter(function (dataset) {
+        return !dataset || dataset.axis !== "right";
+      });
+      const rightAxisDatasets = (chart.datasets || []).filter(function (dataset) {
+        return dataset && dataset.axis === "right";
+      });
+      const usesRightAxis = rightAxisDatasets.length > 0;
+        const pad = { top: 10, right: usesRightAxis ? 58 : 10, bottom: 34, left: 44 };
+      const innerWidth = width - pad.left - pad.right;
+      const innerHeight = height - pad.top - pad.bottom;
+      const labels = chart.labels || [];
+      const fixedYAxis = getFixedYAxisConfig(chart);
+      const leftBounds = fixedYAxis
+        ? { min: fixedYAxis.min, max: fixedYAxis.max }
+        : getSeriesBoundsFromDatasets(leftAxisDatasets.length ? leftAxisDatasets : (chart.datasets || []), false);
+      const bounds = leftBounds;
+      const span = bounds.max - bounds.min || 1;
+      const rightBounds = usesRightAxis ? getSeriesBoundsFromDatasets(rightAxisDatasets, true) : null;
+      const rightSpan = rightBounds ? (rightBounds.max - rightBounds.min || 1) : 1;
+      const yLeft = function (value) {
+        return pad.top + innerHeight * (bounds.max - value) / span;
+      };
+      const yRight = function (value) {
+        return pad.top + innerHeight * (rightBounds.max - value) / rightSpan;
+      };
+
+      let svg = '<svg viewBox="0 0 ' + width + ' ' + height + '" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">';
+      svg += '<rect x="0" y="0" width="' + width + '" height="' + height + '" fill="transparent" />';
+
+        const yTicks = fixedYAxis && Array.isArray(fixedYAxis.ticks) && fixedYAxis.ticks.length
+          ? fixedYAxis.ticks
+          : axisTicks(bounds.min, bounds.max, 4);
+        yTicks.forEach(function (tick) {
+          const y = yLeft(tick);
+          svg += '<line x1="' + pad.left + '" y1="' + y + '" x2="' + (pad.left + 8) + '" y2="' + y + '" stroke="#000000" stroke-width="1.1" />';
+          svg += '<text x="' + (pad.left - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + formatYAxisTick(tick, chart) + '</text>';
+        });
+
+        if (usesRightAxis) {
+          axisTicks(rightBounds.min, rightBounds.max, 4).forEach(function (tick) {
+            const y = yRight(tick);
+            svg += '<line x1="' + (width - pad.right - 8) + '" y1="' + y + '" x2="' + (width - pad.right) + '" y2="' + y + '" stroke="#B4C7E7" stroke-width="1.1" />';
+            svg += '<text x="' + (width - pad.right + 8) + '" y="' + (y + 4) + '" text-anchor="start" font-size="10" font-weight="700" fill="#B4C7E7" font-family="Times New Roman, SimHei, Heiti SC, serif">' + tick.toFixed(0) + '</text>';
+          });
+        }
+
+        const useZeroCenteredTimeAxis = shouldUseZeroCenteredTimeAxis(chart) && bounds.min <= 0 && bounds.max >= 0;
+        const useBetweenTickMarks = useZeroCenteredTimeAxis && shouldUseBetweenTickMarks(chart);
+        const axisBaseY = useZeroCenteredTimeAxis
+          ? yLeft(0)
+          : (height - pad.bottom);
+        const axisLabelY = useZeroCenteredTimeAxis
+          ? (height - 10)
+          : (height - 10);
+        const axisTickEndY = useZeroCenteredTimeAxis
+          ? Math.max(pad.top + 2, axisBaseY - 8)
+          : (height - pad.bottom - 8);
+
+        const tickCount = getPreferredTimeTickCount(chart, labels.length);
+        if (useBetweenTickMarks && tickCount > 0) {
+          for (let i = 0; i <= tickCount; i++) {
+            const boundaryIndex = Math.max(0, Math.min(labels.length - 1, Math.round((labels.length - 1) * i / tickCount)));
+            const x = pad.left + (innerWidth * boundaryIndex / Math.max(1, labels.length - 1));
+            svg += '<line x1="' + x + '" y1="' + axisBaseY + '" x2="' + x + '" y2="' + axisTickEndY + '" stroke="#000000" stroke-width="1.1" />';
+          }
+          for (let i = 0; i < tickCount; i++) {
+            const labelIndex = Math.max(0, Math.min(labels.length - 1, Math.round((labels.length - 1) * (i + 0.5) / tickCount)));
+            const x = pad.left + (innerWidth * ((labels.length - 1) * (i + 0.5) / tickCount) / Math.max(1, labels.length - 1));
+            const label = formatTimeAxisLabel(labels[labelIndex], chart);
+            svg += '<text x="' + x + '" y="' + axisLabelY + '" text-anchor="middle" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + label.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</text>';
+          }
+        } else {
+          for (let i = 0; i < tickCount; i++) {
+            const index = tickCount === 1 ? 0 : Math.round((labels.length - 1) * i / (tickCount - 1));
+            const x = pad.left + (innerWidth * index / Math.max(1, labels.length - 1));
+            const label = formatTimeAxisLabel(labels[index], chart);
+            svg += '<line x1="' + x + '" y1="' + axisBaseY + '" x2="' + x + '" y2="' + axisTickEndY + '" stroke="#000000" stroke-width="1.1" />';
+            svg += '<text x="' + x + '" y="' + axisLabelY + '" text-anchor="middle" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + label.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</text>';
+          }
+        }
+
+        svg += '<line x1="' + pad.left + '" y1="' + pad.top + '" x2="' + pad.left + '" y2="' + (height - pad.bottom) + '" stroke="#000000" stroke-width="1.1" />';
+        if (usesRightAxis) {
+          svg += '<line x1="' + (width - pad.right) + '" y1="' + pad.top + '" x2="' + (width - pad.right) + '" y2="' + (height - pad.bottom) + '" stroke="#B4C7E7" stroke-width="1.1" />';
+        }
+        svg += '<line x1="' + pad.left + '" y1="' + axisBaseY + '" x2="' + (width - pad.right) + '" y2="' + axisBaseY + '" stroke="#000000" stroke-width="1.1" />';
+
+      if (chart.type === "bar" && chart.datasets.length) {
+        const dataset = chart.datasets[0];
+        const barWidth = innerWidth / Math.max(1, labels.length) * 0.72;
+        dataset.data.forEach(function (value, index) {
+          if (!isNumericValue(value)) {
+            return;
+          }
+          const x = pad.left + innerWidth * index / Math.max(1, labels.length) + 4;
+          const y = pad.top + innerHeight * (bounds.max - value) / span;
+          const h = pad.top + innerHeight - y;
+          svg += '<rect x="' + x + '" y="' + y + '" width="' + barWidth + '" height="' + h + '" rx="3" fill="' + datasetColor(dataset.color, 0.72) + '" />';
+        });
+      } else {
+        chart.datasets.filter(function (dataset) {
+          return dataset && dataset.render === "bar";
+        }).forEach(function (dataset, datasetIndex, barDatasets) {
+          const yFn = dataset.axis === "right" && usesRightAxis ? yRight : yLeft;
+          const axisBounds = dataset.axis === "right" && usesRightAxis ? rightBounds : bounds;
+          const baseValue = axisBounds.min > 0 ? axisBounds.min : (axisBounds.max < 0 ? axisBounds.max : 0);
+          const baseY = yFn(baseValue);
+          const barWidth = Math.max(3, innerWidth / Math.max(1, labels.length) * 0.55);
+          const offset = (datasetIndex - (barDatasets.length - 1) / 2) * (barWidth + 1);
+          dataset.data.forEach(function (value, index) {
+            if (!isNumericValue(value)) {
+              return;
+            }
+            const centerX = pad.left + innerWidth * index / Math.max(1, labels.length - 1);
+            const y = yFn(value);
+            const rectY = Math.min(y, baseY);
+            const rectH = Math.max(1, Math.abs(baseY - y));
+            svg += '<rect x="' + (centerX - barWidth / 2 + offset).toFixed(2) + '" y="' + rectY.toFixed(2) + '" width="' + barWidth.toFixed(2) + '" height="' + rectH.toFixed(2) + '" rx="1.5" fill="' + datasetColor(dataset.color, 1) + '" />';
+          });
+        });
+
+        chart.datasets.filter(function (dataset) {
+          return !dataset || dataset.render !== "bar";
+        }).forEach(function (dataset) {
+          const points = [];
+          const markerPoints = [];
+          const strokeColor = datasetColor(dataset.color, 1);
+          const yFn = dataset.axis === "right" && usesRightAxis ? yRight : yLeft;
+          dataset.data.forEach(function (value, index) {
+            if (!isNumericValue(value)) {
+              return;
+            }
+            const x = pad.left + innerWidth * index / Math.max(1, labels.length - 1);
+            const y = yFn(value);
+            points.push(x.toFixed(2) + "," + y.toFixed(2));
+            if (chart.datasets.length > 1 && String(dataset.label || "") === "2026" && shouldShow2026Markers(chart)) {
+              markerPoints.push({ x: x, y: y });
+            }
+          });
+          if (points.length) {
+            svg += '<polyline fill="none" stroke="' + strokeColor + '" stroke-width="2.2" points="' + points.join(" ") + '" />';
+          }
+          if (markerPoints.length) {
+            markerPoints.forEach(function (point) {
+              svg += '<circle cx="' + point.x.toFixed(2) + '" cy="' + point.y.toFixed(2) + '" r="3.2" fill="#fffaf3" stroke="' + strokeColor + '" stroke-width="1.8" />';
+            });
+          }
+        });
+
+      }
+
+        if (String(chart.title || "") === "秦港5500大卡动力煤长协价（元/吨）") {
+          const targetSeries = chart.datasets.find(function (dataset) {
+            return String(dataset.label || "") === "2026";
+          });
+          if (targetSeries) {
+          const visiblePoints = [];
+          targetSeries.data.forEach(function (value, index) {
+            if (!isNumericValue(value)) {
+              return;
+            }
+            const point = {
+              x: pad.left + innerWidth * index / Math.max(1, labels.length - 1),
+              y: pad.top + innerHeight * (bounds.max - value) / span,
+              value: value
+            };
+
+            const lastPoint = visiblePoints[visiblePoints.length - 1];
+            if (lastPoint && Math.abs(point.x - lastPoint.x) < 8 && Math.abs(point.y - lastPoint.y) < 8) {
+              visiblePoints[visiblePoints.length - 1] = point;
+            } else {
+              visiblePoints.push(point);
+            }
+          });
+
+          visiblePoints.forEach(function (point) {
+            const labelY = Math.min(height - pad.bottom + 12, point.y + 14);
+            svg += '<text x="' + point.x.toFixed(2) + '" y="' + labelY.toFixed(2) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + formatChartValue(point.value, chart) + '</text>';
+            });
+          }
+        }
+
+        if (chart.datasets.length > 1 && shouldShowLatestSeriesValueLabels(chart)) {
+          const latestSeriesPoints = [];
+
+          chart.datasets.forEach(function (dataset) {
+            if (dataset && (dataset.render === "bar" || dataset.axis === "right")) {
+              return;
+            }
+            let latestIndex = -1;
+            for (let i = dataset.data.length - 1; i >= 0; i -= 1) {
+              if (isNumericValue(dataset.data[i])) {
+                latestIndex = i;
+                break;
+              }
+            }
+            if (latestIndex < 0) {
+              return;
+            }
+
+            latestSeriesPoints.push({
+              dataset: dataset,
+              value: dataset.data[latestIndex],
+              pointX: pad.left + innerWidth * latestIndex / Math.max(1, labels.length - 1),
+              pointY: pad.top + innerHeight * (bounds.max - dataset.data[latestIndex]) / span
+            });
+          });
+
+          if (shouldPlaceLatestSeriesLabelsBelowPoint(chart)) {
+            const laidOutPoints = distributeLowerLabelPositions(
+              latestSeriesPoints,
+              height - 8,
+              13
+            );
+
+            laidOutPoints.forEach(function (point) {
+              const text = formatChartValue(point.value, chart, point.dataset && point.dataset.label);
+              const lineEndY = Math.max(point.pointY + 8, point.labelY - 12);
+              svg += '<line x1="' + point.pointX.toFixed(2) + '" y1="' + point.pointY.toFixed(2) + '" x2="' + point.pointX.toFixed(2) + '" y2="' + lineEndY.toFixed(2) + '" stroke="#000000" stroke-width="1" />';
+              svg += '<text x="' + point.pointX.toFixed(2) + '" y="' + point.labelY.toFixed(2) + '" text-anchor="middle" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + text + '</text>';
+            });
+          } else {
+            const laidOutPoints = distributeLabelPositions(
+              latestSeriesPoints,
+              pad.top + 14,
+              height - pad.bottom - 8,
+              14
+            );
+
+            laidOutPoints.forEach(function (point) {
+              const text = formatChartValue(point.value, chart, point.dataset && point.dataset.label);
+              const textWidth = Math.max(28, text.length * 7.2);
+              const labelX = width - 2;
+              const elbowX = Math.max(point.pointX + 8, labelX - textWidth - 10);
+              const elbowY = Math.max(pad.top + 8, Math.min(point.labelY - 5, height - pad.bottom - 4));
+
+              svg += '<line x1="' + point.pointX.toFixed(2) + '" y1="' + point.pointY.toFixed(2) + '" x2="' + elbowX.toFixed(2) + '" y2="' + elbowY.toFixed(2) + '" stroke="#000000" stroke-width="1" />';
+              svg += '<line x1="' + elbowX.toFixed(2) + '" y1="' + elbowY.toFixed(2) + '" x2="' + labelX.toFixed(2) + '" y2="' + point.labelY.toFixed(2) + '" stroke="#000000" stroke-width="1" />';
+              svg += '<text x="' + labelX.toFixed(2) + '" y="' + (point.labelY - 2).toFixed(2) + '" text-anchor="end" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + text + '</text>';
+            });
+          }
+        }
+
+        if (chart.datasets.length === 1) {
+          const series = chart.datasets[0];
+          let latestIndex = -1;
+        for (let i = series.data.length - 1; i >= 0; i -= 1) {
+          if (isNumericValue(series.data[i])) {
+            latestIndex = i;
+            break;
+          }
+        }
+
+        if (latestIndex >= 0) {
+          const latestValue = series.data[latestIndex];
+          let pointX = pad.left + innerWidth * latestIndex / Math.max(1, labels.length - 1);
+          let pointY = pad.top + innerHeight * (bounds.max - latestValue) / span;
+
+          if (chart.type === "bar") {
+            const barWidth = innerWidth / Math.max(1, labels.length) * 0.72;
+            pointX = pad.left + innerWidth * latestIndex / Math.max(1, labels.length) + 4 + barWidth / 2;
+          }
+
+          const text = formatChartValue(latestValue, chart);
+          const textWidth = Math.max(28, text.length * 7.2);
+          const labelX = width - pad.right - 4;
+          const fixedLabelValue = getFixedSingleSeriesLabelAxisValue(chart);
+          const targetLabelY = fixedLabelValue === null
+            ? (pointY - 14)
+            : (pad.top + innerHeight * (bounds.max - Math.max(bounds.min, Math.min(bounds.max, fixedLabelValue))) / span);
+          const labelY = Math.max(pad.top + 16, Math.min(targetLabelY, height - pad.bottom - 8));
+          const textAnchor = "end";
+          const elbowX = Math.max(pointX + 10, labelX - textWidth - 12);
+          const elbowY = fixedLabelValue === null
+            ? Math.max(pad.top + 10, labelY - 6)
+            : labelY;
+
+          svg += '<line x1="' + pointX.toFixed(2) + '" y1="' + pointY.toFixed(2) + '" x2="' + elbowX.toFixed(2) + '" y2="' + elbowY.toFixed(2) + '" stroke="#000000" stroke-width="1" />';
+          svg += '<line x1="' + elbowX.toFixed(2) + '" y1="' + elbowY.toFixed(2) + '" x2="' + labelX.toFixed(2) + '" y2="' + labelY.toFixed(2) + '" stroke="#000000" stroke-width="1" />';
+          svg += '<text x="' + labelX.toFixed(2) + '" y="' + (labelY - 2).toFixed(2) + '" text-anchor="' + textAnchor + '" font-size="10" font-weight="700" fill="#000000" font-family="Times New Roman, SimHei, Heiti SC, serif">' + text + '</text>';
+        }
+      }
+
+      svg += "</svg>";
+      container.innerHTML = svg;
+    }
+
+        function createChartCard(chart, chartId) {
+      return createChartCardV2(chart, chartId);
+    }
+
+    function createChartCardV2(chart, chartId) {
+      chart = getDisplayChartV2(chart);
+      const card = document.createElement("article");
+      card.className = "chart-card";
+
+      const h4 = document.createElement("h4");
+      h4.textContent = chart.title;
+      card.appendChild(h4);
+
+      if (Array.isArray(chart.datasets) && (chart.datasets.length > 1 || shouldShowSingleSeriesLegend(chart))) {
+        const legend = document.createElement("div");
+        legend.className = "chart-legend";
+
+          chart.datasets.forEach(function (dataset) {
+            const item = document.createElement("span");
+            item.className = "legend-item";
+            item.style.color = datasetColor(dataset.color, 1);
+            item.title = dataset.label;
+
+            if (dataset.render === "bar") {
+              const fill = document.createElement("span");
+              fill.className = "legend-fill";
+              item.appendChild(fill);
+            } else {
+              const line = document.createElement("span");
+              line.className = "legend-line";
+              if (shouldShowLegendMarker(chart, dataset)) {
+                const marker = document.createElement("span");
+                marker.className = "legend-marker";
+                line.appendChild(marker);
+              }
+              item.appendChild(line);
+            }
+
+          const label = document.createElement("span");
+          label.className = "legend-label";
+          label.textContent = dataset.label;
+          item.appendChild(label);
+          legend.appendChild(item);
+        });
+
+        card.appendChild(legend);
+      }
+
+      const wrap = document.createElement("div");
+      wrap.className = "chart-wrap";
+
+      const graph = document.createElement("div");
+      graph.id = chartId;
+      graph.style.width = "100%";
+      graph.style.height = "100%";
+      wrap.appendChild(graph);
+      card.appendChild(wrap);
+
+      renderSimpleChart(graph, chart);
+      return card;
+    }
+
+      function shouldShowSubgroupTitle(category, group) {
+        return !(category.groups.length === 1 && category.label === group.label);
+      }
+
+      function renderCategorizedCoalPanel(panel, categories, sheetIndex, idPrefix) {
+        const nav = document.createElement("div");
+        nav.className = "category-nav";
+
+        categories.forEach(function (category) {
+          const targetId = idPrefix + "-" + sheetIndex + "-" + category.key;
+          const link = document.createElement("a");
+          link.className = "category-link";
+          link.href = "#" + targetId;
+          link.textContent = category.label;
+        link.dataset.target = targetId;
+        nav.appendChild(link);
+      });
+
+      nav.addEventListener("click", function (event) {
+        const link = event.target.closest(".category-link");
+        if (!link) {
+          return;
+        }
+        event.preventDefault();
+        const target = document.getElementById(link.dataset.target);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+
+      panel.appendChild(nav);
+
+        categories.forEach(function (category, categoryIndex) {
+          const block = document.createElement("div");
+          block.className = "section-block";
+          block.id = idPrefix + "-" + sheetIndex + "-" + category.key;
+
+          const title = document.createElement("h3");
+          title.textContent = category.label;
+          block.appendChild(title);
+
+          category.groups.forEach(function (group, groupIndex) {
+            const subgroup = document.createElement("div");
+            subgroup.className = "subgroup-block";
+
+            if (shouldShowSubgroupTitle(category, group)) {
+              const subgroupTitle = document.createElement("div");
+              subgroupTitle.className = "subgroup-title";
+              subgroupTitle.textContent = group.label;
+              subgroup.appendChild(subgroupTitle);
+            }
+
+            const grid = document.createElement("div");
+            grid.className = "chart-grid";
+            if (
+              idPrefix === "coking-coal" &&
+              (category.label === "价格" || group.label === "钢材库存")
+            ) {
+              grid.classList.add("chart-grid-two-up");
+            }
+
+            group.charts.forEach(function (chart, chartIndex) {
+              const chartId = "chart-" + idPrefix + "-" + sheetIndex + "-" + categoryIndex + "-" + groupIndex + "-" + chartIndex;
+              grid.appendChild(createChartCardV2(chart, chartId));
+            });
+
+            subgroup.appendChild(grid);
+          block.appendChild(subgroup);
+        });
+
+          panel.appendChild(block);
+        });
+      }
+
+      function renderPowerCoalPanel(panel, sheet, sheetIndex) {
+        renderCategorizedCoalPanel(panel, buildPowerCoalCategories(sheet.charts || []), sheetIndex, "power-coal");
+      }
+
+      function renderCokingCoalPanel(panel, sheet, sheetIndex) {
+        renderCategorizedCoalPanel(panel, buildCokingCoalCategories(sheet.charts || []), sheetIndex, "coking-coal");
+      }
+
+        function renderDashboard() {
+      return renderDashboardV2();
+    }
+
+    function renderDashboardV2() {
+      const data = window.COAL_DASHBOARD_DATA;
+      const metaNode = document.getElementById("dashboard-meta");
+      const tabs = document.getElementById("sheet-tabs");
+      const panels = document.getElementById("sheet-panels");
+      if (!metaNode || !tabs || !panels) {
+        return;
+      }
+
+      if (!data || !Array.isArray(data.sheets)) {
+        metaNode.textContent = "数据源未加载";
+        return;
+      }
+
+      metaNode.textContent = "最近同步：" + data.generatedAt + " | 来源：" + data.sourceFile;
+      tabs.innerHTML = "";
+      panels.innerHTML = "";
+
+      data.sheets.forEach(function (sheet, index) {
+        const button = document.createElement("button");
+        button.className = "tab-btn" + (index === 0 ? " active" : "");
+        button.textContent = sheet.displayTitle;
+        button.type = "button";
+        button.dataset.target = "sheet-v2-" + index;
+        tabs.appendChild(button);
+
+        const panel = document.createElement("div");
+        panel.className = "sheet-panel" + (index === 0 ? " active" : "");
+        panel.id = "sheet-v2-" + index;
+
+          if (index === 0) {
+            renderPowerCoalPanel(panel, sheet, index);
+          } else if (index === 1) {
+            renderCokingCoalPanel(panel, sheet, index);
+          } else {
+            groupBySection(sheet.charts).forEach(function (group, groupIndex) {
+            const block = document.createElement("div");
+            block.className = "section-block";
+
+            const title = document.createElement("h3");
+            title.textContent = group.section;
+            block.appendChild(title);
+
+            const grid = document.createElement("div");
+            grid.className = "chart-grid";
+
+            group.charts.forEach(function (chart, chartIndex) {
+              const chartId = "chart-v2-" + index + "-" + groupIndex + "-" + chartIndex;
+              grid.appendChild(createChartCardV2(chart, chartId));
+            });
+
+            block.appendChild(grid);
+            panel.appendChild(block);
+          });
+        }
+
+        panels.appendChild(panel);
+      });
+
+      tabs.onclick = function (event) {
+        const targetButton = event.target.closest(".tab-btn");
+        if (!targetButton) {
+          return;
+        }
+        const target = targetButton.dataset.target;
+        document.querySelectorAll("#sheet-tabs .tab-btn").forEach(function (node) {
+          node.classList.toggle("active", node === targetButton);
+        });
+        document.querySelectorAll("#sheet-panels .sheet-panel").forEach(function (node) {
+          node.classList.toggle("active", node.id === target);
+        });
+      };
+    }
+
+    function activateDashboardSheet(sheetIndex) {
+      const tabButtons = document.querySelectorAll("#sheet-tabs .tab-btn");
+      const panels = document.querySelectorAll("#sheet-panels .sheet-panel");
+      if (!tabButtons.length || !panels.length || !tabButtons[sheetIndex]) {
+        return;
+      }
+
+      const targetId = tabButtons[sheetIndex].dataset.target;
+      tabButtons.forEach(function (node, index) {
+        node.classList.toggle("active", index === sheetIndex);
+      });
+      panels.forEach(function (node) {
+        node.classList.toggle("active", node.id === targetId);
+      });
+    }
+
+        function setupHeaderNav() {
+      return setupHeaderNavV4();
+    }
+
+        function setupHeaderNavV2() {
+      return setupHeaderNavV4();
+    }
+
+        function setupHeaderNavV3() {
+      return setupHeaderNavV4();
+    }
+
+    function setupHeaderNavV4() {
+      const navLinks = Array.from(document.querySelectorAll(".stats.category-nav .stat-link"));
+      const boardSection = document.getElementById("board-index-section");
+      const dashboardSection = document.getElementById("dashboard-section");
+      if (!navLinks.length || !boardSection || !dashboardSection) {
+        return;
+      }
+
+      function setActive(activeKey) {
+        navLinks.forEach(function (node) {
+          node.classList.toggle("is-active", node.dataset.navKey === activeKey);
+        });
+      }
+
+      navLinks.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          if (link.dataset.navKey === "board-index") {
+            boardSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            setActive("board-index");
+            return;
+          }
+          dashboardSection.scrollIntoView({ behavior: "smooth", block: "start" });
+          setActive("dashboard");
+        });
+      });
+
+      const tabContainer = document.getElementById("sheet-tabs");
+      if (tabContainer) {
+        tabContainer.addEventListener("click", function () {
+          const dashboardRect = dashboardSection.getBoundingClientRect();
+          if (dashboardRect.top < window.innerHeight * 0.55 && dashboardRect.bottom > window.innerHeight * 0.2) {
+            setActive("dashboard");
+          }
+        });
+      }
+
+      function refreshActiveByScroll() {
+        const boardRect = boardSection.getBoundingClientRect();
+        const dashboardRect = dashboardSection.getBoundingClientRect();
+        const pivot = window.innerHeight * 0.28;
+
+        if (boardRect.top <= pivot && boardRect.bottom > pivot) {
+          setActive("board-index");
+          return;
+        }
+
+        if (dashboardRect.top <= pivot && dashboardRect.bottom > pivot) {
+          setActive("dashboard");
+        }
+      }
+
+      window.addEventListener("scroll", refreshActiveByScroll, { passive: true });
+      window.addEventListener("resize", refreshActiveByScroll);
+      refreshActiveByScroll();
+    }
+
     updateTime();
     setInterval(updateTime, 1000);
+    renderBoardIndexChart();
+    renderDashboardV2();
+    setupHeaderNavV4();
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
